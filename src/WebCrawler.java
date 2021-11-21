@@ -1,6 +1,8 @@
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Scanner;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -20,12 +22,14 @@ public class WebCrawler {
 	/**
 	 * @param args
 	 */
-	public static String crawled_links = "";
 	public static String crawl_sublinks(String link) {
-		try {
-			Document doc = Jsoup.connect(link).get();
+		Document doc = Html_to_Text(link);
+		String links = "";
+		if (doc != null) {
+			String text = doc.text();
+			String title = doc.title();
 			Elements es = doc.select("a");
-			String links = "";
+			
 			for(Element e : es) {
 				String href = e.attr("abs:href");
 				if(href.length()>3)
@@ -33,64 +37,100 @@ public class WebCrawler {
 					links = links+"\n"+href;
 				}
 			}
-			return links;
+		}
+		return links;
+	}
+	public static Document Html_to_Text(String link) {
+		Document doc;
+		try {
+			doc = Jsoup.connect(link).get();
+			String title = doc.title().replace("|","_").replace("?", "_").replace("\\","_"); 
+			BufferedWriter writer = new BufferedWriter(new FileWriter("Webpages/"+ title + ".txt"));
+			writer.write(doc.text());
+			writer.close();
+			return doc;
+			
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return "";
+			System.out.println("error in connecting to the page " + link + "\n\n");;
+			return null;
 		}
 	}
-	public static void crawl_link(String link) {
-		
-			crawled_links += link+"\n";
-			String list_of_sublinks = crawl_sublinks(link);
-			String [] array_list_of_sublinks = list_of_sublinks.split("\n");
-			for (String string_al : array_list_of_sublinks) {
-				
-				if(!string_al.isEmpty()) {
-					
-					crawled_links += string_al+"\n";
-					System.out.println(string_al);
-				}
-			}
-		
-		
+	
+	public static void crawl_primary_link(String link) {
+		write_to_crawled_page(link);
+		System.out.println(link);
+		String l2_links = crawl_sublinks(link);
+		l2_crawling(l2_links);
 	}
-	public static void write_crawled_links() {
-		BufferedWriter writer;
+	
+	public static void l2_crawling(String l2_links) {
+		String l3_links = "";
+		String [] array_l2_links = l2_links.split("\n");
+		for (String l2_link : array_l2_links) {
+			if(!l2_link.isEmpty())
+			{
+				write_to_crawled_page(l2_link);
+				System.out.println(l2_link);
+				l3_links = l3_links + crawl_sublinks(l2_link);
+			}
+		}
+		if(!l3_links.isEmpty())l3_crawling(l3_links);
+	}
+	
+	public static void l3_crawling(String l3_links) {
+		String l4_links = "";
+		String [] array_l3_links = l3_links.split("\n");
+		for (String l3_link : array_l3_links) {
+			if(!l3_link.isEmpty())
+			{
+				write_to_crawled_page(l3_link);
+				System.out.println(l3_link);
+				l4_links = l4_links +  crawl_sublinks(l3_link);
+			}
+		}
+		if(!l4_links.isEmpty())l4_crawling(l4_links);
+	}
+	public static void l4_crawling(String l4_links) {
+		String [] array_l4_links = l4_links.split("\n");
+		for (String l4_link : array_l4_links) {
+			if(!l4_link.isEmpty())
+			{
+				write_to_crawled_page(l4_link);
+				System.out.println(l4_link);
+			}
+		}
+	}
+	public static File file_create() {
+		File f = new File("crawledlinks.txt");
 		try {
-			writer = new BufferedWriter(new FileWriter("crawledlinks.txt"));
-			writer.write(crawled_links);
-			writer.close();
+			if(!f.exists()){
+				  f.createNewFile();
+				}
+			return f;
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			return null;
 		}
 		
 	}
 	
-	public static void Html_to_Text() {
-		String [] array_list_of_crawled_links = crawled_links.split("\n");
-		for (String crawled_link : array_list_of_crawled_links) {
-			try {
-				Document doc = Jsoup.connect(crawled_link).get();
-				String title = doc.title().replace("|","_").replace("?", "_").replace("\\","_"); 
-				BufferedWriter writer = new BufferedWriter(new FileWriter("Webpages/"+ title + ".txt"));
-				writer.write(doc.text());
-				writer.close();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+	public static void write_to_crawled_page(String link) {
+		File f = file_create();
+		FileWriter fw;
+		try {
+			fw = new FileWriter(f,true);
+			fw.write(link + "\n");
+			fw.close();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
+	
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		String string_link = "https://www.cbc.ca/";
-		crawl_link(string_link);
-		write_crawled_links();
-		System.out.println("#######################\n\n");
-		Html_to_Text();
+		Scanner myObj = new Scanner(System.in);  // Create a Scanner object
+		System.out.println("Enter link to be crawled including https: ");
+		String string_link = myObj.nextLine();  // Read user input
+		crawl_primary_link(string_link);
 	}
 
 }
