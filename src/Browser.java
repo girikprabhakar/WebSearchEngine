@@ -14,6 +14,9 @@ import java.awt.GridLayout;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import java.awt.CardLayout;
+import java.awt.Color;
+
+import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -25,6 +28,7 @@ import javax.swing.JScrollPane;
 import java.awt.event.InputMethodListener;
 import java.awt.event.InputMethodEvent;
 import java.awt.Desktop;
+import java.awt.Dimension;
 public class Browser extends JFrame {
 
 	private JPanel contentPane;
@@ -55,8 +59,10 @@ public class Browser extends JFrame {
 	 */
 	public void search() {
 		SearchResults.removeAll();
+		
 		for(Lookup.Result result:lookup.searchTerm(searchQuery.getText())){
 			addSearchResult(result.heading,result.link,result.description);
+		
 		}
 		contentPane.validate();
 		contentPane.repaint();
@@ -67,6 +73,11 @@ public class Browser extends JFrame {
 	public void addSearchResult(String headingText,String linkText,String descriptionText) {
 		SearchResults.setLayout(new BoxLayout(SearchResults, BoxLayout.Y_AXIS));
 		JPanel SearchResult = new JPanel();
+		SearchResult.setMaximumSize( new Dimension(
+		            Integer.MAX_VALUE,
+		            25*3
+		    ) );
+		SearchResult.setBorder(BorderFactory.createLineBorder(Color.black));
 		SearchResult.setLayout(new GridLayout(0, 1, 0, 0));
 		
 		JLabel Heading = new JLabel(headingText);
@@ -179,15 +190,15 @@ public class Browser extends JFrame {
 
 		AutoSuggestions.setLayout(new GridLayout(5, 1, 0, 0));
 		
-		JLabel lblNewLabel_2 = new JLabel("New label");
-		AutoSuggestions.add(lblNewLabel_2);
-		
-		JLabel lblNewLabel_1 = new JLabel("New label");
-		AutoSuggestions.add(lblNewLabel_1);
+//		JLabel lblNewLabel_2 = new JLabel("New label");
+//		AutoSuggestions.add(lblNewLabel_2);
+//		
+//		JLabel lblNewLabel_1 = new JLabel("New label");
+//		AutoSuggestions.add(lblNewLabel_1);
 		
 		SearchResults = new JPanel();
 //		addSearchResult("asd1","asd","asd");
-		addSearchResult("asd2","asd","asd");
+//		addSearchResult("asd2","asd","asd");
 //		addSearchResult("asd3","asd","asd");
 //		addSearchResult("asd4","asd","asd");
 //		addSearchResult("asd5","asd","asd");
