@@ -31,7 +31,7 @@ public class BrowserOld {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				new AutoCompletor(frame,searchQuery);				
+//				new AutoCompletor(frame,searchQuery);				
 			}  
         	    });  
         

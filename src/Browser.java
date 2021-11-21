@@ -4,6 +4,8 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import java.awt.FlowLayout;
@@ -15,15 +17,20 @@ import java.awt.CardLayout;
 import javax.swing.BoxLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JScrollPane;
+import java.awt.event.InputMethodListener;
+import java.awt.event.InputMethodEvent;
 
 public class Browser extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField searchQuery;
-	private String[] suggestions= {"hey","Hi","hello"};
+	private ArrayList<String> suggestions;
 	private JPanel SearchResults;
+	AutoCompletor ac;
 
 	/**
 	 * Launch the application.
@@ -62,10 +69,21 @@ public class Browser extends JFrame {
 		SearchResults.add(SearchResult);
 //		return SearchResult;
 	}
+	public void updateSuggestions() {
+		if(searchQuery.getText()=="") {
+			suggestions.clear();
+		}else {
+			suggestions=ac.getSuggestions(searchQuery.getText());	
+		}
+		
+	}
+	
 	/**
 	 * Create the frame.
 	 */
 	public Browser() {
+		ac=new AutoCompletor();
+//		ac.searchTrie("Can");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
@@ -86,6 +104,36 @@ public class Browser extends JFrame {
 		SearchBox.setLayout(new BoxLayout(SearchBox, BoxLayout.X_AXIS));
 		
 		searchQuery = new JTextField();
+		searchQuery.getDocument().addDocumentListener(new DocumentListener() {
+			  public void changedUpdate(DocumentEvent e) {
+				    warn();
+				  }
+				  public void removeUpdate(DocumentEvent e) {
+//				    warn();
+				  }
+				  public void insertUpdate(DocumentEvent e) {
+				    warn();
+				  }
+
+				  public void warn() {
+					  updateSuggestions();
+						AutoSuggestions.removeAll();
+						for(String s : suggestions) {
+							JLabel lblNewLabel = new JLabel(s);
+							AutoSuggestions.add(lblNewLabel);	
+							lblNewLabel.addMouseListener(new MouseAdapter()  
+							{  
+							    public void mouseClicked(MouseEvent e)  
+							    {  
+							    	searchQuery.setText(lblNewLabel.getText());
+							    }  
+							}); 
+						}
+						contentPane.validate();
+						contentPane.repaint();
+//				  	System.out.println();
+				  }
+				});
 		SearchBox.add(searchQuery);
 		searchQuery.setColumns(15);
 		
@@ -93,22 +141,7 @@ public class Browser extends JFrame {
 		searchButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				AutoSuggestions.removeAll();
-				for(String s : suggestions) {
-					JLabel lblNewLabel = new JLabel(s);
-					AutoSuggestions.add(lblNewLabel);	
-					lblNewLabel.addMouseListener(new MouseAdapter()  
-					{  
-					    public void mouseClicked(MouseEvent e)  
-					    {  
-					    	searchQuery.setText(lblNewLabel.getText());
-					    }  
-					}); 
-				}
 
-				
-				contentPane.validate();
-				contentPane.repaint();
 				
 			}
 		});
