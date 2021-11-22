@@ -37,6 +37,7 @@ public class Browser extends JFrame {
 	private JPanel SearchResults;
 	AutoCompletor ac;
 	private Lookup lookup;
+	private ClosestWord closestWord;
 
 	/**
 	 * Launch the application.
@@ -59,7 +60,11 @@ public class Browser extends JFrame {
 	 */
 	public void search() {
 		SearchResults.removeAll();
-		
+		String word=closestWord.closestWordFrom(searchQuery.getText());
+
+		if(!word.equals(searchQuery.getText())) {
+			addClosestWord(word);
+		}
 		for(Lookup.Result result:lookup.searchTerm(searchQuery.getText())){
 			addSearchResult(result.heading,result.link,result.description);
 		
@@ -105,6 +110,38 @@ public class Browser extends JFrame {
 		SearchResults.add(SearchResult);
 
 	}
+	public void addClosestWord(String closestWord) {
+		SearchResults.setLayout(new BoxLayout(SearchResults, BoxLayout.Y_AXIS));
+		JPanel SearchResult = new JPanel();
+		SearchResult.setMaximumSize( new Dimension(
+		            Integer.MAX_VALUE,
+		            25*3
+		    ) );
+//		SearchResult.setBorder(BorderFactory.createLineBorder(Color.black));
+		SearchResult.setLayout(new GridLayout(0, 1, 0, 0));
+		
+		JLabel Closest = new JLabel("Did you mean '"+closestWord+"'?");
+		SearchResult.add(Closest);
+
+		JLabel empty = new JLabel("");
+		SearchResult.add(empty);
+		SearchResult.addMouseListener(new MouseAdapter()  
+		{  
+		    public void mouseClicked(MouseEvent e)  
+		    {  
+
+		    	    try {
+//		    	        Desktop.getDesktop().browse(new URL(linkText).toURI());
+		    	    	searchQuery.setText(closestWord);
+		    	    	Closest.setText("");
+		    	    } catch (Exception ex) {
+		    	        ex.printStackTrace();
+		    	    }
+		    }  
+		}); 
+		SearchResults.add(SearchResult);
+
+	}
 	public void updateSuggestions() {
 		if(searchQuery.getText()=="") {
 			suggestions.clear();
@@ -120,6 +157,7 @@ public class Browser extends JFrame {
 	public Browser() {
 		//Autocompleter
 		ac=new AutoCompletor();
+		closestWord=new ClosestWord();
 		//Search engine
 		lookup=new Lookup();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

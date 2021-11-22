@@ -63,9 +63,13 @@ public class AutoCompletor {
 		}else {
 			System.out.println("Total occurances of '"+token+"':0");
 		}
-
+		int count=0;
 		for(String suggestion:trie.prefixMatch(token)) {
 			suggestions.add(suggestion);
+			count++;
+			if(count>=5) {
+				break;
+			}
 		}
 		return suggestions;
 	}

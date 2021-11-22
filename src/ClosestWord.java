@@ -8,7 +8,7 @@ import javax.sound.midi.Sequence;
 import textprocessing.In;
 import textprocessing.Sequences;
 public class ClosestWord {
-	static ArrayList<String> tokens;
+	ArrayList<String> tokens;
 	ClosestWord(){
 		String folderPath="Webpages/";
 		String filename;
@@ -18,7 +18,7 @@ public class ClosestWord {
 		for (int i = 0; i < listOfFiles.length; i++) {
 		  if (listOfFiles[i].isFile()) {
 			  filename=listOfFiles[i].getName();
-			  System.out.println("Processed File:"+filename);
+			  System.out.println("Closest Processed File:"+filename);
 			  String inputFilename =folderPath+filename;
 				File file = new File(inputFilename);
 				URI uri = file.toURI();
@@ -40,7 +40,7 @@ public class ClosestWord {
 		}
 	}
 	
-	public static String closetWordFrom (String s) {
+	public String closestWordFrom (String s) {
 		int minDist=Integer.MAX_VALUE;
 		String nearest="";
 		for (String token : tokens ) {
@@ -56,7 +56,7 @@ public class ClosestWord {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		ClosestWord ac=new ClosestWord ();
-		System.out.println(ac.closetWordFrom("addditioon"));
+		System.out.println(ac.closestWordFrom("addditioon"));
 	}
 
 }
