@@ -1,4 +1,5 @@
 import java.io.File;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -25,11 +26,14 @@ public class AutoCompletor {
 		}
 	}
 	void createTrie(String inputFilename) {
-		String REGEX = "[\\[+\\]+:{}^~?\\\\/()><=\"!]'@";
-
-//		StringUtils.replaceAll(inputString, REGEX, "\\\\$0");
-		inputFilename = inputFilename.replaceAll(REGEX, "\\\\$0");
-		In in = new In(inputFilename);
+//		String REGEX = "[\\[+\\]+:{}^~?\\\\/()><=\"!]'@ ";
+//
+////		StringUtils.replaceAll(inputString, REGEX, "\\\\$0");
+//		inputFilename = inputFilename.replaceAll(REGEX, "\\\\$0");
+		File file = new File(inputFilename);
+		URI uri = file.toURI();
+		String asciiURI = uri.toASCIIString();
+		In in = new In(asciiURI);
 		
 		ArrayList<String> tokens=new ArrayList<String>();
 		
