@@ -2,6 +2,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.Scanner;
 
 import org.jsoup.Jsoup;
@@ -24,7 +25,13 @@ public class WebCrawler {
 	 * @param link to be crawled
 	 * @return String containing all the sublinks present in the link.
 	 */
+	static HashSet<String> alreadyCrawled=new HashSet<String>();
 	public static String crawl_sublinks(String link) {
+		if(alreadyCrawled.contains(link)) {
+			return "";
+		}else {
+			alreadyCrawled.add(link);
+		}
 		Document doc = Html_to_Text(link);
 		String links = "";
 		if (doc != null) {
@@ -71,6 +78,10 @@ public class WebCrawler {
 		} catch (IOException e) {
 			System.out.println(e);
 			System.out.println("error in connecting to the page " + link + "\n\n");;
+			return null;
+		}catch(Exception e) {
+			System.out.println(e);
+			System.out.println("error in connecting to the page " + link + "\n\n");			
 			return null;
 		}
 	}

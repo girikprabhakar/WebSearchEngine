@@ -72,12 +72,16 @@ public class Indexing {
 	
 	//Returns words from given file
 	public static String[] getStringFromFiles(File f) {
+		try {
 		In in = new In(f);
 		String text = in.readAll();
 		text = text.replaceAll("[^a-zA-Z0-9\\s]", ""); 
 		String[] words = text.split(" ");		
 		
 		return words;
+		}catch(Exception e) {
+			return new String[0];
+		}
 		
 	}
 }
