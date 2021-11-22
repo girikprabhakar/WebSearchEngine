@@ -8,7 +8,12 @@ import java.util.regex.Pattern;
 import textprocessing.In;
 
 public class Search {
-	//Searches for a phrase in the files using InvertedIndex created by Indexing.java.
+	/**
+	 * This function Searches for a phrase in the files using InvertedIndex created by Indexing.java.
+	 * @param keyword String to be searched
+	 * @param numberOfResults Total number of matching results
+	 * @return Arraylist containing the result
+	 */
 	public static ArrayList<HashMap<String, String>> searchPhrase(String keyword,int numberOfResults) {
 		Indexing index = new Indexing();
 		String phrase = keyword;
@@ -24,7 +29,13 @@ public class Search {
 		return new ArrayList<HashMap<String, String>>();
 	}
 	
-	//Prints given number of results from the provided Map.
+	/**
+	 * Prints given number of results from the provided Map.
+	 * @param result Map containing the search results in sorted manner
+	 * @param numberOfResults Total number of matching results
+	 * @param keyword String that was searched
+	 * @return The arraylist of the consolidated result
+	 */
 	public static ArrayList<HashMap<String, String>> printResult(Map<String,Integer> result, int numberOfResults,String keyword) {
 		Iterator<Entry<String, Integer>> iterator = result.entrySet().iterator();  
 		int i = 0;
@@ -79,6 +90,12 @@ public class Search {
 		}
 		return resultCollection;
 	}
+	
+	/**
+	 * This function generates link from the title of the file.
+	 * @param title Title of the file
+	 * @return generated link
+	 */
 	public static String getLink(String title) {
 		File file = new File("UrlToTitle.txt");
 		URI uri = file.toURI();

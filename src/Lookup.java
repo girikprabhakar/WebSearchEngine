@@ -9,7 +9,12 @@ public class Lookup {
 		String description;
 		int rank;
 	}
-
+	
+	/**
+	 * This function search the string from the existing pages
+	 * @param s String to be searched
+	 * @return Arraylist containing the results
+	 */
 	public ArrayList<Lookup.Result> searchTerm(String s) {
 		Random r=new Random();
 		ArrayList<Result> results=new ArrayList<Result>();

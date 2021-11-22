@@ -20,7 +20,9 @@ import org.jsoup.select.Elements;
 public class WebCrawler {
 
 	/**
-	 * @param args
+	 * This function returns the links of all the sublinks present in the link.
+	 * @param link to be crawled
+	 * @return String containing all the sublinks present in the link.
 	 */
 	public static String crawl_sublinks(String link) {
 		Document doc = Html_to_Text(link);
@@ -40,6 +42,12 @@ public class WebCrawler {
 		}
 		return links;
 	}
+	
+	/**
+	 * This function converts the HTML content of the link to the text format and write it to the file with it's title name under Webpages folder
+	 * @param link to be converted
+	 * @return Document Variable that has the information of the connected link
+	 */
 	public static Document Html_to_Text(String link) {
 		Document doc;
 		try {
@@ -48,11 +56,7 @@ public class WebCrawler {
 			BufferedWriter writer = new BufferedWriter(new FileWriter("Webpages/"+ title + ".txt"));
 			writer.write(doc.text());
 			writer.close();
-
-//			BufferedWriter urlTitleMapper = new BufferedWriter(new FileWriter("UrlToTitle.txt"));
-//			urlTitleMapper.write(title+"///"+link);
-//			urlTitleMapper.close();
-//			
+			
 			File f = file_create("UrlToTitle.txt");
 			FileWriter fw;
 			try {
@@ -71,6 +75,10 @@ public class WebCrawler {
 		}
 	}
 	
+	/**
+	 * This function crawls the link provided by the user.
+	 * @param link To be crawled
+	 */
 	public static void crawl_primary_link(String link) {
 		write_to_crawled_page(link);
 		System.out.println(link);
@@ -78,6 +86,11 @@ public class WebCrawler {
 		l2_crawling(l2_links);
 	}
 	
+	
+	/**
+	 * This functions performs the level 2 crawling
+	 * @param l2_links contains all the level 2 links
+	 */
 	public static void l2_crawling(String l2_links) {
 		String l3_links = "";
 		String [] array_l2_links = l2_links.split("\n");
@@ -92,6 +105,10 @@ public class WebCrawler {
 		if(!l3_links.isEmpty())l3_crawling(l3_links);
 	}
 	
+	/**
+	 * This functions performs the level 3 crawling
+	 * @param l3_links contains all the level 3 links
+	 */
 	public static void l3_crawling(String l3_links) {
 		String l4_links = "";
 		String [] array_l3_links = l3_links.split("\n");
@@ -105,6 +122,11 @@ public class WebCrawler {
 		}
 		if(!l4_links.isEmpty())l4_crawling(l4_links);
 	}
+	
+	/**
+	 * This functions performs the level 4 crawling
+	 * @param l4_links contains all the level 4 links
+	 */
 	public static void l4_crawling(String l4_links) {
 		String [] array_l4_links = l4_links.split("\n");
 		for (String l4_link : array_l4_links) {
@@ -115,6 +137,12 @@ public class WebCrawler {
 			}
 		}
 	}
+	
+	/**
+	 * This function creates file if it doesn't exist
+	 * @param name Name of the file to be created
+	 * @return File created
+	 */
 	public static File file_create(String name) {
 		File f = new File(name);
 		try {
@@ -129,6 +157,10 @@ public class WebCrawler {
 		
 	}
 	
+	/**
+	 * This function keeps the record of the crawled link in the crawledlinks.txt file
+	 * @param link that has been crawled
+	 */
 	public static void write_to_crawled_page(String link) {
 		File f = file_create("crawledlinks.txt");
 		FileWriter fw;
@@ -141,6 +173,10 @@ public class WebCrawler {
 		}
 	}
 	
+	/**
+	 * Main function
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		Scanner myObj = new Scanner(System.in);  // Create a Scanner object
 		System.out.println("Enter link to be crawled including https: ");
