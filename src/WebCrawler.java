@@ -15,7 +15,7 @@ import org.jsoup.select.Elements;
  */
 
 /**
- * @author prabh
+ * 
  *
  */
 public class WebCrawler {
@@ -26,13 +26,13 @@ public class WebCrawler {
 	 * @return String containing all the sublinks present in the link.
 	 */
 	static HashSet<String> alreadyCrawled=new HashSet<String>();
-	public static String crawl_sublinks(String link) {
+	public static String crawlSublinks(String link) {
 		if(alreadyCrawled.contains(link)) {
 			return "";
 		}else {
 			alreadyCrawled.add(link);
 		}
-		Document doc = Html_to_Text(link);
+		Document doc = htmlToText(link);
 		String links = "";
 		if (doc != null) {
 			String text = doc.text();
@@ -55,7 +55,7 @@ public class WebCrawler {
 	 * @param link to be converted
 	 * @return Document Variable that has the information of the connected link
 	 */
-	public static Document Html_to_Text(String link) {
+	public static Document htmlToText(String link) {
 		Document doc;
 		try {
 			doc = Jsoup.connect(link).get();
@@ -90,11 +90,11 @@ public class WebCrawler {
 	 * This function crawls the link provided by the user.
 	 * @param link To be crawled
 	 */
-	public static void crawl_primary_link(String link) {
-		write_to_crawled_page(link);
+	public static void crawlPrimaryLink(String link) {
+		writeToCrawledPage(link);
 		System.out.println(link);
-		String l2_links = crawl_sublinks(link);
-		l2_crawling(l2_links);
+		String l2Links = crawlSublinks(link);
+		l2Crawling(l2Links);
 	}
 	
 	
@@ -102,48 +102,48 @@ public class WebCrawler {
 	 * This functions performs the level 2 crawling
 	 * @param l2_links contains all the level 2 links
 	 */
-	public static void l2_crawling(String l2_links) {
-		String l3_links = "";
-		String [] array_l2_links = l2_links.split("\n");
-		for (String l2_link : array_l2_links) {
-			if(!l2_link.isEmpty())
+	public static void l2Crawling(String l2Links) {
+		String l3Links = "";
+		String [] arrayL2Links = l2Links.split("\n");
+		for (String l2Link : arrayL2Links) {
+			if(!l2Link.isEmpty())
 			{
-				write_to_crawled_page(l2_link);
-				System.out.println(l2_link);
-				l3_links = l3_links + crawl_sublinks(l2_link);
+				writeToCrawledPage(l2Link);
+				System.out.println(l2Link);
+				l3Links = l3Links + crawlSublinks(l2Link);
 			}
 		}
-		if(!l3_links.isEmpty())l3_crawling(l3_links);
+		if(!l3Links.isEmpty())l3Crawling(l3Links);
 	}
 	
 	/**
 	 * This functions performs the level 3 crawling
 	 * @param l3_links contains all the level 3 links
 	 */
-	public static void l3_crawling(String l3_links) {
-		String l4_links = "";
-		String [] array_l3_links = l3_links.split("\n");
-		for (String l3_link : array_l3_links) {
-			if(!l3_link.isEmpty())
+	public static void l3Crawling(String l3Links) {
+		String l4Links = "";
+		String [] arrayL3Links = l3Links.split("\n");
+		for (String l3Link : arrayL3Links) {
+			if(!l3Link.isEmpty())
 			{
-				write_to_crawled_page(l3_link);
-				System.out.println(l3_link);
-				l4_links = l4_links +  crawl_sublinks(l3_link);
+				writeToCrawledPage(l3Link);
+				System.out.println(l3Link);
+				l4Links = l4Links +  crawlSublinks(l3Link);
 			}
 		}
-		if(!l4_links.isEmpty())l4_crawling(l4_links);
+		if(!l4Links.isEmpty())l4Crawling(l4Links);
 	}
 	
 	/**
 	 * This functions performs the level 4 crawling
 	 * @param l4_links contains all the level 4 links
 	 */
-	public static void l4_crawling(String l4_links) {
-		String [] array_l4_links = l4_links.split("\n");
+	public static void l4Crawling(String l4Links) {
+		String [] array_l4_links = l4Links.split("\n");
 		for (String l4_link : array_l4_links) {
 			if(!l4_link.isEmpty())
 			{
-				write_to_crawled_page(l4_link);
+				writeToCrawledPage(l4_link);
 				System.out.println(l4_link);
 			}
 		}
@@ -172,7 +172,7 @@ public class WebCrawler {
 	 * This function keeps the record of the crawled link in the crawledlinks.txt file
 	 * @param link that has been crawled
 	 */
-	public static void write_to_crawled_page(String link) {
+	public static void writeToCrawledPage(String link) {
 		File f = file_create("crawledlinks.txt");
 		FileWriter fw;
 		try {
@@ -192,7 +192,7 @@ public class WebCrawler {
 		Scanner myObj = new Scanner(System.in);  // Create a Scanner object
 		System.out.println("Enter link to be crawled including https: ");
 		String string_link = myObj.nextLine();  // Read user input
-		crawl_primary_link(string_link);
+		crawlPrimaryLink(string_link);
 	}
 
 }

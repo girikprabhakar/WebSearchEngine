@@ -19,10 +19,7 @@ public class Search {
 		String phrase = keyword;
 		ArrayList<String> wordSearch = index.find(phrase);
 		phrase = phrase.toLowerCase();
-		if(wordSearch==null) {			
-			// Search Simillar words;
-		}
-		else {		
+		if(wordSearch!=null) {			
 			Map<String,Integer> sortedMap = SortResultsByRank.sortingByRank(wordSearch, phrase);
 			return printResult(sortedMap,numberOfResults,keyword);
 		}
