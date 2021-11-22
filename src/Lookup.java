@@ -13,11 +13,16 @@ public class Lookup {
 	public ArrayList<Lookup.Result> searchTerm(String s) {
 		Random r=new Random();
 		ArrayList<Result> results=new ArrayList<Result>();
-		Result sample=new Result();
-		sample.heading="hey"+r.nextFloat();
-		sample.link="https://google.com";
-		sample.description="hey ther!";
-		results.add(sample);
+
+		Search.searchPhrase(s,15);
+		for(HashMap<String,String> element:Search.searchPhrase(s,15)) {
+			Result sample=new Result();
+			sample.heading=element.getOrDefault("title", "");
+			sample.link=element.getOrDefault("link", "");
+			sample.description=element.getOrDefault("description", "");
+			results.add(sample);
+		}
+		
 		return results;
 	}
 }

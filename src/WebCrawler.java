@@ -48,9 +48,24 @@ public class WebCrawler {
 			BufferedWriter writer = new BufferedWriter(new FileWriter("Webpages/"+ title + ".txt"));
 			writer.write(doc.text());
 			writer.close();
+
+//			BufferedWriter urlTitleMapper = new BufferedWriter(new FileWriter("UrlToTitle.txt"));
+//			urlTitleMapper.write(title+"///"+link);
+//			urlTitleMapper.close();
+//			
+			File f = file_create("UrlToTitle.txt");
+			FileWriter fw;
+			try {
+				fw = new FileWriter(f,true);
+				fw.write(title+"///"+link + "\n");
+				fw.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 			return doc;
 			
 		} catch (IOException e) {
+			System.out.println(e);
 			System.out.println("error in connecting to the page " + link + "\n\n");;
 			return null;
 		}
@@ -100,8 +115,8 @@ public class WebCrawler {
 			}
 		}
 	}
-	public static File file_create() {
-		File f = new File("crawledlinks.txt");
+	public static File file_create(String name) {
+		File f = new File(name);
 		try {
 			if(!f.exists()){
 				  f.createNewFile();
@@ -115,7 +130,7 @@ public class WebCrawler {
 	}
 	
 	public static void write_to_crawled_page(String link) {
-		File f = file_create();
+		File f = file_create("crawledlinks.txt");
 		FileWriter fw;
 		try {
 			fw = new FileWriter(f,true);
