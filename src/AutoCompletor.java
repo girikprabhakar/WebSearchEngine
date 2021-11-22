@@ -40,6 +40,7 @@ public class AutoCompletor {
 		Integer idx=0;
 		String token;
 		String indexes;
+		try {
         while (!in.isEmpty()) {
             String s = in.readLine();
             StringTokenizer st=new StringTokenizer(s);
@@ -51,6 +52,10 @@ public class AutoCompletor {
     			idx+=(token.length()+1);
             }         
         }
+		}catch(Exception e) {
+			System.out.println(e);
+		}
+		
 	}
 
 	ArrayList<String> getSuggestions(String token){

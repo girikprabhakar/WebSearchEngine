@@ -27,6 +27,7 @@ public class ClosestWord {
 				Integer idx=0;
 				String token;
 				String indexes;
+				try {
 		        while (!in.isEmpty()) {
 		            String s = in.readLine();
 		            StringTokenizer st=new StringTokenizer(s);
@@ -35,7 +36,9 @@ public class ClosestWord {
 		            	tokens.add(token);
 		            }
 		        }
-		        
+				}catch(Exception e) {
+					System.out.println(e);
+				}
 		  }
 		}
 	}
