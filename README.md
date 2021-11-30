@@ -15,3 +15,8 @@ Features List:
 * Word Corrector
 * GUI
 
+Installation
+1. clone the repo 
+2. Open the project in eclipse
+3. add all the jar files from lib folder to the class path
+4. Run Browser.java
